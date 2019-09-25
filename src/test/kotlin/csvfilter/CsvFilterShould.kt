@@ -16,6 +16,7 @@ class CsvFilterShould {
         assertThat(result).isEqualTo(listOf(headerLine, invoiceLine))
 
     }
+
     @Test
     fun tax_fields_are_mutually_exclusive(){
 
@@ -45,5 +46,13 @@ class CsvFilterShould {
         assertThat(result).isEqualTo(listOf(headerLine))
     }
 
+    @Test
+    fun net_field_not_correct_with_iva(){
+        val invoiceLine = "1,02/05/2019,1000,800,19,,ACER Laptop,B76430134,"
+
+        val result =  CsvFilter().filter(listOf(headerLine, invoiceLine))
+
+        assertThat(result).isEqualTo(listOf(headerLine))
+    }
 
 }
