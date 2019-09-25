@@ -6,14 +6,14 @@ class CsvFilter {
         result.add(lines[0])
         val invoice = lines[1]
         val fields=invoice.split(',')
-        val ivaFieldIndex = 4
-        val igicFieldIndex = 5
         val grossFieldIndex = 2
         val netFieldIndex = 3
-        val ivaField = fields[ivaFieldIndex]
-        val igicField = fields[igicFieldIndex]
+        val ivaFieldIndex = 4
+        val igicFieldIndex = 5
         val netField = fields[netFieldIndex]
         val grossField = fields[grossFieldIndex]
+        val ivaField = fields[ivaFieldIndex]
+        val igicField = fields[igicFieldIndex]
 
         val decimalRegex = "\\d+(\\.\\d+)?".toRegex()
         val taxFieldsAreMutuallyExclusive = (ivaField.matches(decimalRegex) || igicField.matches(decimalRegex)) &&
@@ -21,18 +21,23 @@ class CsvFilter {
 
 
         if (taxFieldsAreMutuallyExclusive){
-            var resultado = (grossField.toBigDecimal() * ivaField.toBigDecimal())/100.toBigDecimal()
-            var suma = resultado + netField.toBigDecimal()
-            if(suma==grossField.toBigDecimal()){
-                result.add(lines[1])
+
+            if(!ivaField.isNullOrEmpty()){
+                var ivaValue = (grossField.toBigDecimal() * ivaField.toBigDecimal())/100.toBigDecimal()
+                var grossValueWithIva = ivaValue + netField.toBigDecimal()
+
+                if(grossValueWithIva==grossField.toBigDecimal()){ result.add(lines[1]) }
             }
+
+           if(!igicField.isNullOrEmpty()){
+               var igicValue = (grossField.toBigDecimal() * igicField.toBigDecimal())/100.toBigDecimal()
+               var grossValueWithIgic = igicValue + netField.toBigDecimal()
+
+               if(grossValueWithIgic==grossField.toBigDecimal()){ result.add(lines[1]) }
+           }
+
         }
         return result.toList()
     }
-
-}
-
-fun main(){
-    CsvFilter().filter(listOf("Num_factura, Fecha, Bruto, Neto, IVA, IGIC, Concepto, CIF _cliente, NIF _cliente","1,02/05/2019,1000,800,19,,ACER Laptop,B76430134,"))
 
 }

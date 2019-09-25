@@ -55,4 +55,14 @@ class CsvFilterShould {
         assertThat(result).isEqualTo(listOf(headerLine))
     }
 
+    @Test
+    fun net_field_not_correct_with_igic(){
+        val invoiceLine = "1,02/05/2019,1000,925,,7,ACER Laptop,B76430134,"
+
+        val result =  CsvFilter().filter(listOf(headerLine, invoiceLine))
+
+        assertThat(result).isEqualTo(listOf(headerLine))
+    }
+
+
 }
