@@ -2,25 +2,36 @@ package csvfilter
 
 class CsvFilter {
     fun filter(lines: List<String>): List<String> {
+
         val result = mutableListOf<String>()
         result.add(lines[0])
         val invoice = lines[1]
-        val fields=invoice.split(',')
+        val fields = invoice.split(',')
         val grossFieldIndex = 2
         val netFieldIndex = 3
         val ivaFieldIndex = 4
         val igicFieldIndex = 5
+        val cifFielIndex = 7
+        val nifFieldIndex = 8
+
+        if(invoice.isNullOrEmpty() ){ return listOf("") }
+
         val netField = fields[netFieldIndex]
         val grossField = fields[grossFieldIndex]
         val ivaField = fields[ivaFieldIndex]
         val igicField = fields[igicFieldIndex]
+        val cifField = fields[cifFielIndex]
+        val nifField = fields[nifFieldIndex]
 
         val decimalRegex = "\\d+(\\.\\d+)?".toRegex()
         val taxFieldsAreMutuallyExclusive = (ivaField.matches(decimalRegex) || igicField.matches(decimalRegex)) &&
                 (ivaField.isNullOrEmpty() || igicField.isNullOrEmpty())
 
+        val idFieldsMustBeExclusive = (cifField.isNullOrEmpty() || nifField.isNullOrEmpty()) &&
+                (!(cifField.isNullOrEmpty() && nifField.isNullOrEmpty()))
 
-        if (taxFieldsAreMutuallyExclusive){
+
+        if (taxFieldsAreMutuallyExclusive && idFieldsMustBeExclusive){
 
             if(!ivaField.isNullOrEmpty()){
                 var ivaValue = (grossField.toBigDecimal() * ivaField.toBigDecimal())/100.toBigDecimal()
@@ -39,5 +50,9 @@ class CsvFilter {
         }
         return result.toList()
     }
+
+
+
+
 
 }
