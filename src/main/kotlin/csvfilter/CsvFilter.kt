@@ -3,6 +3,8 @@ package csvfilter
 class CsvFilter {
     fun filter(lines: List<String>): List<String> {
 
+        if(lines.size==1) throw IllegalArgumentException("no tiene cabecera")
+
         val result = mutableListOf<String>()
         result.add(lines[0])
         val invoice = lines[1]

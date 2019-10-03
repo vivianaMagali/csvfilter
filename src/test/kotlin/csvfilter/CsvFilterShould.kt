@@ -75,6 +75,14 @@ class CsvFilterShould {
         assertThat(result).isEqualTo(listOf(""))
     }
 
+    @Test
+    fun correct_lines_must_have_hearder(){
+
+        val invoiceLine = "1,02/05/2019,1000,930,,7,ACER Laptop,B76430134,"
+
+        assertFailsWith<IllegalArgumentException> { CsvFilter().filter(listOf(invoiceLine)) }
+    }
+
 
 
 
