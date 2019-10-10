@@ -74,14 +74,40 @@ class CsvFilterShould {
         assertFailsWith<IllegalArgumentException> { CsvFilter().apply(listOf("")) }
     }
 
-
     @Test
     fun ids_fields_must_good_format_and_exclusive() {
         val result = filter.apply(fileWithOneInvoiceLineHaving(cif = emptyField, nif = "5458573E"))
 
         assertThat(result).isEqualTo(emptyDataFile)
     }
-    
+
+    @Test
+    fun gross_field_must_be_decimal() {
+        val result = filter.apply(fileWithOneInvoiceLineHaving(grossAmount = "ABCD"))
+
+        assertThat(result).isEqualTo(emptyDataFile)
+    }
+
+    @Test
+    fun net_field_must_be_decimal() {
+        val result = filter.apply(fileWithOneInvoiceLineHaving(netAmount = "ABCD"))
+
+        assertThat(result).isEqualTo(emptyDataFile)
+    }
+
+    @Test
+    fun num_invoice_field_must_be_integer() {
+        val result = filter.apply(fileWithOneInvoiceLineHaving(invoiceId = "ABCD"))
+
+        assertThat(result).isEqualTo(emptyDataFile)
+    }
+
+    @Test
+    fun date_field_must_be_good_format() {
+        val result = filter.apply(fileWithOneInvoiceLineHaving(invoiceDate = "50-04/asd2019"))
+
+        assertThat(result).isEqualTo(emptyDataFile)
+    }
 
     private fun fileWithOneInvoiceLineHaving(
         ivaTax: String = "19", igicTax: String = emptyField, concept: String = "irrelevant",
