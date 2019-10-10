@@ -68,13 +68,6 @@ class CsvFilterShould {
 
         assertThat(result).isEqualTo(emptyDataFile)
     }
-/*
-    @Test
-    fun list_Empty_return_list_Empty() {
-        val result = filter.apply(fileWithOneInvoiceLineHaving())
-
-        assertThat(result).isEqualTo(listOf(""))
-    }*/
 
     @Test
     fun correct_lines_must_have_hearder() {
@@ -82,6 +75,13 @@ class CsvFilterShould {
     }
 
 
+    @Test
+    fun ids_fields_must_good_format_and_exclusive() {
+        val result = filter.apply(fileWithOneInvoiceLineHaving(cif = emptyField, nif = "5458573E"))
+
+        assertThat(result).isEqualTo(emptyDataFile)
+    }
+    
 
     private fun fileWithOneInvoiceLineHaving(
         ivaTax: String = "19", igicTax: String = emptyField, concept: String = "irrelevant",
@@ -103,5 +103,8 @@ class CsvFilterShould {
         return listOf(headerLine, formattedLine)
     }
 }
+
+
+
 
 

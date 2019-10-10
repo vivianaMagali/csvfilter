@@ -30,18 +30,17 @@ class CsvFilter {
         val nifField = fields[nifFieldIndex]
 
         val decimalRegex = "\\d+(\\.\\d+)?".toRegex()
-
+        val cifRegex = "^[A-Za-z]\\d{7}([A-Za-z]|\\d)".toRegex()
+        val nifRegex = "\\d{8}[A-Za-z]".toRegex()
 
         val taxFieldsAreMutuallyExclusive = (ivaField.matches(decimalRegex) || igicField.matches(decimalRegex)) &&
                 (ivaField.isNullOrEmpty() xor igicField.isNullOrEmpty())
 
+        val idFieldsMustBeExclusive = (cifField.isNullOrEmpty() xor nifField.isNullOrEmpty())
 
+        val idFieldsAreGoodFormat = (cifField.matches(cifRegex) || nifField.matches(nifRegex) )
 
-        val idFieldsMustBeExclusive  = (cifField.isNullOrEmpty() || nifField.isNullOrEmpty()) &&
-                (cifField.isNullOrEmpty() xor nifField.isNullOrEmpty())
-
-
-        if (taxFieldsAreMutuallyExclusive && idFieldsMustBeExclusive) {
+        if (taxFieldsAreMutuallyExclusive && idFieldsMustBeExclusive && idFieldsAreGoodFormat) {
 
             val tax = if (ivaField.isNullOrEmpty()) igicField.toBigDecimal() else ivaField.toBigDecimal()
 
