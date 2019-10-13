@@ -76,7 +76,7 @@ class CsvFilterShould {
 
     @Test
     fun ids_fields_must_good_format_and_exclusive() {
-        val result = filter.apply(fileWithOneInvoiceLineHaving(cif = emptyField, nif = "5458573E"))
+        val result = filter.apply(fileWithOneInvoiceLineHaving(cif = "", nif = "545E"))
 
         assertThat(result).isEqualTo(emptyDataFile)
     }
@@ -104,7 +104,7 @@ class CsvFilterShould {
 
     @Test
     fun date_field_must_be_good_format() {
-        val result = filter.apply(fileWithOneInvoiceLineHaving(invoiceDate = "50-04/asd2019"))
+        val result = filter.apply(fileWithOneInvoiceLineHaving(invoiceDate = "50/04-2019"))
 
         assertThat(result).isEqualTo(emptyDataFile)
     }
