@@ -2,14 +2,15 @@ package csvfilter
 
 class CsvFilter {
 
-    val numberInvoiceIndex = 0
-    val dateInvoiceIndex = 1
-    val grossFieldIndex = 2
-    val netFieldIndex = 3
-    val ivaFieldIndex = 4
-    val igicFieldIndex = 5
-    val cifFielIndex = 7
-    val nifFieldIndex = 8
+    private val numberInvoiceIndex = 0
+    private val dateInvoiceIndex = 1
+    private val grossFieldIndex = 2
+    private val netFieldIndex = 3
+    private val ivaFieldIndex = 4
+    private val igicFieldIndex = 5
+    private val cifFielIndex = 7
+    private val nifFieldIndex = 8
+
 
 
     fun apply(lines: List<String>): List<String> {
